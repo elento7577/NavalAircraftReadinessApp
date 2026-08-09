@@ -1,42 +1,43 @@
 /**
  * Name: Elento Brent
  * Date: August 8, 2026
- * Purpose: Defines a fighter aircraft that inherits common
- * information from the Aircraft base class and adds
- * fighter-specific mission information.
+ * Purpose: Represents an F/A-18E Super Hornet and demonstrates
+ * inheritance and polymorphism.
  */
 
-// CHILD CLASS - demonstrates inheritance from Aircraft.
+// Inheritance: FighterAircraft extends Aircraft.
 public class FighterAircraft extends Aircraft {
 
-    private String mission;
+    private String weaponLoadout;
 
-    /**
-     * Constructor for creating a FighterAircraft object.
-     */
-    public FighterAircraft(int id, String callSign, String aircraftType,
-                           String status, String mission) {
+    public FighterAircraft(int id, String callSign,
+                           String aircraftType, String status,
+                           String mission, String weaponLoadout) {
 
-        // Calls the constructor of the parent Aircraft class.
-        super(id, callSign, aircraftType, status);
-
-        this.mission = mission;
+        super(id, callSign, aircraftType, status, mission);
+        this.weaponLoadout = weaponLoadout;
     }
 
-    public String getMission() {
-        return mission;
+    public String getWeaponLoadout() {
+        return weaponLoadout;
     }
 
-    public void setMission(String mission) {
-        this.mission = mission;
+    public void setWeaponLoadout(String weaponLoadout) {
+        this.weaponLoadout = weaponLoadout;
     }
 
-    /**
-     * Displays the fighter aircraft's information.
-     */
+    // Polymorphism: overrides the abstract method from Aircraft.
+    @Override
+    public void performMission() {
+
+        System.out.println(getCallSign()
+                + " is conducting a Combat Air Patrol mission.");
+    }
+
     @Override
     public void displayInfo() {
+
         super.displayInfo();
-        System.out.println("Mission: " + mission);
+        System.out.println("Weapon Loadout: " + weaponLoadout);
     }
 }

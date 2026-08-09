@@ -1,11 +1,12 @@
 /**
  * Name: Elento Brent
  * Date: August 8, 2026
- * Purpose: Main application for Project Week 1.
- * Provides terminal input/output and demonstrates
- * inheritance and composition using naval aviation classes.
+ * Purpose: Main application for the Naval Aviation Flight
+ * Operations Manager. Demonstrates inheritance, polymorphism,
+ * composition, constructors, and terminal input/output.
  */
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class NavalAviationApp {
@@ -15,65 +16,107 @@ public class NavalAviationApp {
         Scanner input = new Scanner(System.in);
 
         // =====================================================
-        // PROJECT WEEK 1 STARTUP SCREEN
+        // PROJECT INFORMATION
         // =====================================================
 
         System.out.println();
         System.out.println("========================================================");
         System.out.println("       NAVAL AVIATION FLIGHT OPERATIONS MANAGER");
-        System.out.println("                    PROJECT WEEK 1");
+        System.out.println("                    PROJECT WEEK 2");
         System.out.println("========================================================");
         System.out.println("Created by: Elento Brent");
         System.out.println();
 
         System.out.println("Welcome to the Naval Aviation Flight Operations Manager!");
         System.out.println();
-        System.out.println("This application demonstrates the management of");
-        System.out.println("aircraft and flight operations aboard a naval carrier.");
-        System.out.println();
-        System.out.println("Use the numbered menu options to navigate the system.");
+        System.out.println("This application manages aircraft and flight operations");
+        System.out.println("aboard a naval aircraft carrier.");
         System.out.println();
 
-        System.out.println("Press ENTER to continue...");
-        input.nextLine();
-
         // =====================================================
-        // INHERITANCE DEMONSTRATION
+        // CREATE AIRCRAFT OBJECTS
         // =====================================================
 
-        // FighterAircraft inherits from the Aircraft class.
         FighterAircraft fighter = new FighterAircraft(
                 1,
                 "Viper 01",
                 "F/A-18E Super Hornet",
                 "READY",
-                "Combat Air Patrol"
+                "Combat Air Patrol",
+                "Training Loadout"
         );
+
+        E2DAircraft hawkeye = new E2DAircraft(
+                2,
+                "Tiger 02",
+                "E-2D Hawkeye",
+                "AIRBORNE",
+                "Airborne Early Warning",
+                "OPERATIONAL"
+        );
+
+        GrowlerAircraft growler = new GrowlerAircraft(
+                3,
+                "Raven 03",
+                "EA-18G Growler",
+                "MAINTENANCE",
+                "Electronic Warfare",
+                "STANDBY"
+        );
+
+        // =====================================================
+        // POLYMORPHISM DEMONSTRATION
+        // =====================================================
+
+        // All three objects are stored as Aircraft references.
+        ArrayList<Aircraft> aircraftList = new ArrayList<>();
+
+        aircraftList.add(fighter);
+        aircraftList.add(hawkeye);
+        aircraftList.add(growler);
+
+        System.out.println();
+        System.out.println("=============== AIRCRAFT MISSIONS ===============");
+
+        for (Aircraft aircraft : aircraftList) {
+
+            // Polymorphism: Java calls the correct overridden
+            // performMission() method for each aircraft.
+            aircraft.performMission();
+        }
 
         // =====================================================
         // COMPOSITION DEMONSTRATION
         // =====================================================
 
-        // FlightOperation contains a FighterAircraft object.
-        FlightOperation operation = new FlightOperation(
-                fighter,
-                "Carrier Flight Operation",
-                "Viper Flight Crew"
+        FlightCrew crew = new FlightCrew(
+                101,
+                "Viper Flight Crew",
+                "Fighter Squadron"
         );
 
-        // =====================================================
-        // DISPLAY INITIAL AIRCRAFT
-        // =====================================================
-
-        System.out.println();
-        System.out.println("================ AIRCRAFT STATUS ================");
-        fighter.displayInfo();
-        System.out.println("==================================================");
+        FlightOperation operation = new FlightOperation(
+                fighter,
+                crew,
+                "Carrier Flight Operation",
+                "READY"
+        );
 
         operation.displayOperation();
 
         // =====================================================
-        // MAIN MENU
+        // DATABASE MANAGER
+        // =====================================================
+
+        DatabaseManager database = new DatabaseManager(
+                "naval_aviation.db"
+        );
+
+        System.out.println();
+        System.out.println("Database: " + database.getDatabaseName());
+
+        // =====================================================
+        // USER MENU
         // =====================================================
 
         int choice;
@@ -81,14 +124,16 @@ public class NavalAviationApp {
         do {
 
             System.out.println();
-            System.out.println("==================== MAIN MENU ====================");
-            System.out.println();
-            System.out.println("1. View Aircraft");
+            System.out.println("================================================");
+            System.out.println("                  MAIN MENU");
+            System.out.println("================================================");
+            System.out.println("1. View All Aircraft");
             System.out.println("2. View Flight Operation");
-            System.out.println("3. Update Aircraft Status");
-            System.out.println("4. Exit");
-            System.out.println();
-            System.out.println("====================================================");
+            System.out.println("3. Run Aircraft Missions");
+            System.out.println("4. Launch Fighter");
+            System.out.println("5. Recover Fighter");
+            System.out.println("6. Exit");
+            System.out.println("================================================");
 
             System.out.print("Enter your selection: ");
 
@@ -99,11 +144,12 @@ public class NavalAviationApp {
                 case 1:
 
                     System.out.println();
-                    System.out.println("============== AIRCRAFT INFORMATION ==============");
+                    System.out.println("=============== AIRCRAFT STATUS ===============");
 
-                    fighter.displayInfo();
+                    for (Aircraft aircraft : aircraftList) {
 
-                    System.out.println("====================================================");
+                        aircraft.displayInfo();
+                    }
 
                     break;
 
@@ -116,22 +162,34 @@ public class NavalAviationApp {
                 case 3:
 
                     System.out.println();
-                    System.out.println("Current Status: " + fighter.getStatus());
+                    System.out.println("=============== MISSION STATUS ===============");
 
-                    System.out.print("Enter new status: ");
+                    for (Aircraft aircraft : aircraftList) {
 
-                    input.nextLine();
-                    String newStatus = input.nextLine();
-
-                    fighter.setStatus(newStatus);
-
-                    System.out.println();
-                    System.out.println("Aircraft status successfully updated.");
-                    System.out.println("New Status: " + fighter.getStatus());
+                        aircraft.performMission();
+                    }
 
                     break;
 
                 case 4:
+
+                    System.out.println();
+                    System.out.println("Launching fighter aircraft...");
+
+                    operation.launchAircraft();
+
+                    break;
+
+                case 5:
+
+                    System.out.println();
+                    System.out.println("Recovering fighter aircraft...");
+
+                    operation.recoverAircraft();
+
+                    break;
+
+                case 6:
 
                     System.out.println();
                     System.out.println("Thank you for using the");
@@ -146,14 +204,11 @@ public class NavalAviationApp {
 
                     System.out.println();
                     System.out.println("Invalid selection.");
-                    System.out.println("Please select an option from 1 through 4.");
-
-                    break;
+                    System.out.println("Please select an option from 1 through 6.");
             }
 
-        } while (choice != 4);
+        } while (choice != 6);
 
         input.close();
     }
 }
-

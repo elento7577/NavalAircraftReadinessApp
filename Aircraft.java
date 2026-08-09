@@ -1,31 +1,29 @@
 /**
  * Name: Elento Brent
  * Date: August 8, 2026
- * Purpose: Provides the base Aircraft class for the Naval Aviation
- * Flight Operations Manager. Stores common aircraft information
- * and provides methods for displaying that information.
+ * Purpose: Abstract base class containing common information
+ * and behavior for naval aircraft.
  */
 
-// BASE CLASS - used to demonstrate inheritance.
-public class Aircraft {
+// Abstract class demonstrating abstraction and inheritance.
+public abstract class Aircraft implements FlightCapable {
 
-    // Private fields demonstrate encapsulation.
     private int id;
     private String callSign;
     private String aircraftType;
     private String status;
+    private String mission;
 
-    /**
-     * Constructor for creating an Aircraft object.
-     */
-    public Aircraft(int id, String callSign, String aircraftType, String status) {
+    public Aircraft(int id, String callSign, String aircraftType,
+                    String status, String mission) {
+
         this.id = id;
         this.callSign = callSign;
         this.aircraftType = aircraftType;
         this.status = status;
+        this.mission = mission;
     }
 
-    // Getters
     public int getId() {
         return id;
     }
@@ -42,18 +40,41 @@ public class Aircraft {
         return status;
     }
 
-    // Setters
+    public String getMission() {
+        return mission;
+    }
+
     public void setStatus(String status) {
         this.status = status;
     }
 
-    /**
-     * Displays the aircraft's information.
-     */
+    public void setMission(String mission) {
+        this.mission = mission;
+    }
+
+    // Each aircraft type will provide its own mission behavior.
+    public abstract void performMission();
+
+    @Override
+    public void launch() {
+        status = "AIRBORNE";
+        System.out.println(callSign + " has launched from the carrier.");
+    }
+
+    @Override
+    public void recover() {
+        status = "READY";
+        System.out.println(callSign + " has recovered aboard the carrier.");
+    }
+
     public void displayInfo() {
-        System.out.println("ID: " + id);
-        System.out.println("Call Sign: " + callSign);
-        System.out.println("Aircraft Type: " + aircraftType);
-        System.out.println("Status: " + status);
+
+        System.out.println("--------------------------------------------");
+        System.out.println("ID:             " + id);
+        System.out.println("Call Sign:      " + callSign);
+        System.out.println("Aircraft Type:  " + aircraftType);
+        System.out.println("Status:         " + status);
+        System.out.println("Mission:        " + mission);
+        System.out.println("--------------------------------------------");
     }
 }
